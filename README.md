@@ -114,4 +114,24 @@ server {
 
 ```
 
- 
+## NGinx
+
+###
+What is SSL Termination?
+SSL termination means that NGINX Plus acts as the server-side SSL endpoint for connections with clients: it performs the decryption of requests and encryption of responses that backend servers would otherwise have to do. The operation is called termination because NGINX Plus closes the client connection and forwards the client data over a newly created, unencrypted connection to the servers in an upstream group. In release R6 and later, NGINX Plus performs SSL termination for TCP connections as well as HTTP connections.
+
+###
+
+## URL of nginx SSL termination 
+
+['ssl termination']  ('https://docs.nginx.com/nginx/admin-guide/security-controls/terminating-ssl-tcp/')
+
+# Nginx WAF
+
+###
+
+NGINX Plus Release 12 and later supports the NGINX ModSecurity WAF. The NGINX ModSecurity WAF protects web applications against SQL Injection (SQLi), Remote Code Execution (RCE), Local File Include (LFI), cross‑site scripting (XSS), and many other attacks.
+
+###
+
+
