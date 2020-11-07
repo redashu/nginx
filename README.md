@@ -135,3 +135,17 @@ NGINX Plus Release 12 and later supports the NGINX ModSecurity WAF. The NGINX Mo
 ###
 
 
+## Installing Developement tools 
+
+```
+yum groupinstall  "Development Tools"
+yum install -y  geoip-devel  gperftools-devel  libcurl-devel  libxml2-devel  libxslt-devel  libgd-devel  lmdb-devel  openssl-devel  pcre-devel  perl-ExtUtils-Embed  yajl-devel  zlib-devel
+
+ yum install http://mirror.centos.org/centos/7/os/x86_64/Packages/gd-devel-2.0.35-26.el7.x86_64.rpm
+ 
+ ```
+ 
+ ### cloning mode security module and compile it with nginx once
+ 
+ ```
+ 
