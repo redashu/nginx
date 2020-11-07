@@ -109,7 +109,8 @@ server {
     server_name  localhost;
     ssl_certificate /etc/ssl/nginx/pub.crt; 
     ssl_certificate_key /etc/ssl/nginx/private.key;
-
+    ssl_protocols       TLSv1 TLSv1.1 TLSv1.2;
+    ssl_ciphers         HIGH:!aNULL:!MD5;
 
 ```
 
