@@ -88,3 +88,29 @@ http {
 
 
 ```
+
+## Configure SSL certificates for NGInx 
+
+### create self sign certificates 
+
+```
+cd /etc/ssl/
+mkdir nginx
+openssl req -x509 -nodes -days 365  -newkey rsa:2048 -keyout private.key -out  pub.crt
+```
+
+### configuration file for SSL 
+
+```
+[root@ip-172-31-22-247 nginx]# cat /etc/nginx/conf.d/default.conf 
+server {
+    listen       80;
+    listen    443 ssl;
+    server_name  localhost;
+    ssl_certificate /etc/ssl/nginx/pub.crt; 
+    ssl_certificate_key /etc/ssl/nginx/private.key;
+
+
+```
+
+ 
