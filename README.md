@@ -241,5 +241,59 @@ cp -v /opt/ModSecurity/modsecurity.conf-recommended  /etc/nginx/modsecurity/mods
 
 ```
 
+## lets enable for a web application 
 
+```
+
+[root@ip-172-31-22-247 nginx-1.18.0]# cat  /etc/nginx/conf.d/default.conf 
+server {
+    listen       80;
+    listen    443 ssl;
+    server_name  ec2-3-85-53-32.compute-1.amazonaws.com;
+    ssl_certificate /etc/ssl/nginx/pub.crt; 
+    ssl_certificate_key /etc/ssl/nginx/private.key;
+ssl_protocols       TLSv1 TLSv1.1 TLSv1.2;
+    ssl_ciphers         HIGH:!aNULL:!MD5;
+
+# enable mode security for this web site 
+
+	modsecurity on;
+    modsecurity_rules_file /etc/nginx/modsecurity/modsecurity.conf;
+    
+```
+
+## checking file 
+
+```
+[root@ip-172-31-22-247 nginx-1.18.0]# nginx -t
+nginx: [emerg] "modsecurity_rules_file" directive Rules error. File: /etc/nginx/modsecurity/modsecurity.conf. Line: 236. Column: 17. Failed to locate the unicode map file from: unicode.mapping Looking at: 'unicode.mapping', 'unicode.mapping', '/etc/nginx/modsecurity/unicode.mapping', '/etc/nginx/modsecurity/unicode.mapping'.  in /etc/nginx/conf.d/default.conf:13
+nginx: configuration file /etc/nginx/nginx.conf test failed
+
+```
+
+### Solution 
+
+```
+[root@ip-172-31-22-247 nginx-1.18.0]# cp /opt/ModSecurity/unicode.mapping /etc/nginx/modsecurity/unicode.mapping
+[root@ip-172-31-22-247 nginx-1.18.0]# nginx -t
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+
+```
+
+### reloading
+
+```
+[root@ip-172-31-22-247 nginx-1.18.0]# systemctl reload nginx 
+[root@ip-172-31-22-247 nginx-1.18.0]# systemctl status nginx 
+● nginx.service - nginx - high performance web server
+   Loaded: loaded (/usr/lib/systemd/system/nginx.service; enabled; vendor preset: disabled)
+   Active: active (running) since Sat 2020-11-07 16:33:37 UTC; 9h ago
+     Docs: http://nginx.org/en/docs/
+  Process: 21175 ExecReload=/bin/sh -c /bin/kill -s HUP $(/bin/cat /var/run/nginx.pid) (code=exited, status=0/SUCCESS)
+ Main PID: 1600 (nginx)
+ 
+ ```
+ 
+ 
   
