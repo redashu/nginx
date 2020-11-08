@@ -44,3 +44,9 @@ modsecurity_rules_file /etc/nginx/modsecurity/modsecurity_includes.conf;
 ```
 
 
+## RUles URL
+
+```
+https://docs.nginx.com/nginx-waf/admin-guide/nginx-plus-modsecurity-waf-owasp-crs/
+
+```
