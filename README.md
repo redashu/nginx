@@ -148,4 +148,98 @@ yum install -y  geoip-devel  gperftools-devel  libcurl-devel  libxml2-devel  lib
  ### cloning mode security module and compile it with nginx once
  
  ```
+ cd /opt
+ git clone --depth 1 -b v3/master https://github.com/SpiderLabs/ModSecurity 
  
+ ```
+ 
+ ## Compiling modules 
+ 
+ ```
+ cd Modsecurity
+  git submodule init  # it generates warning then only
+  
+  ===
+  cat /etc/environment 
+
+LANG=en_US.UTF-8
+LC_ALL=en_US.UTF-8
+
+====
+
+git submodule update
+./build.sh
+./configure
+make
+make install
+```
+
+## download modusecurity Nginx modules
+
+```
+cd /opt/
+git clone --depth 1 https://github.com/SpiderLabs/ModSecurity-nginx.git
+nginx -v # check version and download the matching tar file
+wget http://nginx.org/download/nginx-1.18.0.tar.gz
+tar xvzf nginx-1.18.0.tar.gz 
+cd nginx-1.18.0
+./configure --with-compat --add-dynamic-module=../ModSecurity-nginx
+make modules
+```
+
+### adding modules in nginx.conf 
+
+```
+cd /opt/nginx-1.18.0
+cp -v objs/ngx_http_modsecurity_module.so /etc/nginx/modules/
+
+-----------
+[root@ip-172-31-22-247 nginx-1.18.0]# cat /etc/nginx/nginx.conf 
+
+user  nginx;
+worker_processes  1;
+
+error_log  /var/log/nginx/error.log warn;
+pid        /var/run/nginx.pid;
+
+
+# Loading security modules 
+load_module /etc/nginx/modules/ngx_http_modsecurity_module.so;
+
+-----
+
+```
+
+### testing config 
+
+```
+nginx -t
+```
+
+## Now enable modusecurity with rules 
+
+```
+mkdir  /etc/nginx/modsecurity
+cp -v /opt/ModSecurity/modsecurity.conf-recommended  /etc/nginx/modsecurity/modsecurity.conf
+```
+
+## chaning in configuration file
+
+### in the line 230 
+
+```
+[root@ip-172-31-22-247 nginx-1.18.0]# grep -i audit  /etc/nginx/modsecurity/modsecurity.conf  -n
+214:# -- Audit log configuration -------------------------------------------------
+220:SecAuditEngine RelevantOnly
+221:SecAuditLogRelevantStatus "^(?:5|4(?!04))"
+224:SecAuditLogParts ABIJDEFHZ
+227:# assumes that you will use the audit log only ocassionally.
+229:SecAuditLogType Serial
+230:SecAuditLog /var/log/nginx/modsec_audit.log
+232:# Specify the path for concurrent audit logging.
+233:#SecAuditLogStorageDir /opt/modsecurity/var/audit/
+
+```
+
+
+  
